@@ -15,6 +15,7 @@ func main() {
 	router.Use(middleware.Logger)
 
 	router.Get("/timeout/{seconds}", timeoutHandler)
+	router.Get("/health", livenessProbe)
 	log.Println(http.ListenAndServe(":8080", router))
 }
 
@@ -27,4 +28,8 @@ func timeoutHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	<-time.After(time.Duration(seconds) * time.Second)
 	_, _ = w.Write([]byte(time.Since(startedAt).String()))
+}
+
+func livenessProbe(w http.ResponseWriter, _ *http.Request) {
+	_, _ = w.Write([]byte("ok"))
 }
