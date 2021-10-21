@@ -26,6 +26,7 @@ func timeoutHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	_, _ = w.Write([]byte("Timeout is: "))
 	<-time.After(time.Duration(seconds) * time.Second)
 	_, _ = w.Write([]byte(time.Since(startedAt).String()))
 }
